@@ -39,33 +39,45 @@
     <div></div>
     <div class="admin-login-background">
         <div class="admin-header">
-            <span> 慕课工作流后台登录</span>
+            <span> 我の工作流系统</span>
         </div>
         <form class="layui-form" action="">
             <div>
                 <i class="layui-icon layui-icon-username admin-icon"></i>
-                <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input admin-input admin-input-username" value="admin">
+                <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="layui-input admin-input admin-input-username" value="zhangsan">
             </div>
             <div>
                 <i class="layui-icon layui-icon-password admin-icon"></i>
-                <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input admin-input" value="123456">
+                <input type="password" name="password" placeholder="请输入密码" autocomplete="off" class="layui-input admin-input" value="1">
             </div>
-            <div>
-                <input type="text" name="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="xszg">
-                <img class="admin-captcha" width="90" height="30" src="../images/captcha.jpg">
-            </div>
+<!--            <div>-->
+<!--                <input type="text" name="captcha" placeholder="请输入验证码" autocomplete="off" class="layui-input admin-input admin-input-verify" value="xszg">-->
+<!--                <img class="admin-captcha" width="90" height="30" src="../images/captcha.jpg">-->
+<!--            </div>-->
             <button class="layui-btn admin-button" lay-submit="" lay-filter="login">登 陆</button>
         </form>
     </div>
 </div>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+<script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+<script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
 <script>
     layui.use(['form'], function () {
         var form = layui.form,
             layer = layui.layer;
-
+        localStorage.clear();
+        sessionStorage.clear();
         // 登录过期的时候，跳出ifram框架
         if (top.location != self.location) top.location = self.location;
+
+        // 粒子线条背景
+        $(document).ready(function(){
+            $('.layui-container').particleground({
+                dotColor:'#7ec7fd',
+                lineColor:'#7ec7fd'
+            });
+        });
 
         // 进行登录操作
         form.on('submit(login)', function (data) {
@@ -78,12 +90,33 @@
                 layer.msg('密码不能为空');
                 return false;
             }
-            if (data.captcha == '') {
-                layer.msg('验证码不能为空');
-                return false;
-            }
-            layer.msg('登录成功', function () {
-                window.location = '../index.html';
+            // if (data.captcha == '') {
+            //     layer.msg('验证码不能为空');
+            //     return false;
+            // }
+            var fd = new FormData();
+            fd.append('username',data.username);
+            fd.append('password',data.password);
+            $.ajax({
+                cache : true,
+                type : "post",
+                url :  ''+publicurl+'login',
+                async : false,
+                data : fd,
+                contentType: false,
+                processData: false,
+                success : function(res) {
+                    layer.msg('登录成功', function () {
+                        localStorage.setItem("userName",res.obj)
+                        window.location = '../index.html';
+                    });
+                },
+                error : function(request) {
+                    layer.alert(request.responseJSON.obj, {
+                        icon: 2,
+                        title:"提示"
+                    });
+                }
             });
             return false;
         });

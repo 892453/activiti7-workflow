@@ -52,6 +52,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
         //-------------------根据自定义用户属性登录-----------------------------
 
+//        根据数据库查询的登录的实际用户
         UserInfoBean userInfoBean = mapper.selectByUsername(username);
         if (userInfoBean == null) {
             throw new UsernameNotFoundException("数据库中无此用户！");

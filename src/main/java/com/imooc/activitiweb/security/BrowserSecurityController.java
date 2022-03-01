@@ -22,7 +22,7 @@ public class BrowserSecurityController {
 
     //估计是在springSecurity登录验证之后，对未登录用户跳转行为进行的判断。
     @RequestMapping("/login")
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)     //定义未认证（未登录）的状态码：401
     public SimpleResponse requireAuthentication(HttpServletRequest request, HttpServletResponse response) {
         /*SavedRequest savedRequest = requestCache.getRequest(request,response);
         if(savedRequest != null){

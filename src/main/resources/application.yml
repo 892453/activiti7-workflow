@@ -4,9 +4,9 @@ server:
     context-path: /
 spring:
   datasource:
-    username: root
-    password: YourPassWord_NiDeMiMa
-    url: jdbc:mysql://127.0.0.1:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    username: activiti2
+    password: 123456
+    url: jdbc:mysql://82.157.148.142:3306/activiti2?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     #日志的相关配置
 logging:

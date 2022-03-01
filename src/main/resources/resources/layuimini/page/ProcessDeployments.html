@@ -157,12 +157,14 @@
         /*表格启动 删除事件*/
         table.on('tool(currentTableFilter)', function (obj) {
             var data = obj.data;
+
             var editData = JSON.stringify(data);
             if (obj.event === 'start') {
                 stratProcessDepEditDialog(obj);
             } else if (obj.event === 'delete') {
                 doDel(obj);
             }else if(obj.event === 'look'){
+                console.log("data:",data);
                 window.open(''+publicurl+'bpmnjs/dist/index.html?type=lookBpmn&deploymentFileUUID='+data.DeploymentId+'&deploymentName='+data.ResourceName+'');
             }
         });

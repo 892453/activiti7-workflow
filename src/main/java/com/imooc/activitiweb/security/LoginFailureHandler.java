@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 登录失败的处理方法
+ */
+
 @Component("loginFailureHandler")
 public class LoginFailureHandler implements AuthenticationFailureHandler{
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -26,6 +30,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         logger.info("登录失败");
+//        设置登录失败后返回的状态码为 500  HttpStatus.INTERNAL_SERVER_ERROR
         httpServletResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         httpServletResponse.setContentType("application/json;charset=UTF-8");
 
@@ -34,7 +39,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler{
         httpServletResponse.getWriter().write(objectMapper.writeValueAsString(
                 AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
                 GlobalConfig.ResponseCode.ERROR.getDesc(),
-                        "登录失败："+e.getMessage()
+                        "登录失败，原因："+e.getMessage()
                 )));
     }
 }

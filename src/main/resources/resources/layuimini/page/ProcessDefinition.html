@@ -30,6 +30,7 @@
               {{#  }else{ }}
                 <a class="layui-btn layui-btn-success layui-btn-xs data-count-active" lay-event="active">激活</a>
               {{#  } }}
+              <a class="layui-btn layui-btn-xs layui-btn-info data-count-look" lay-event="look">历史</a>
               <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
 
@@ -97,6 +98,9 @@
                 doActive(obj);
             }else if (obj.event === 'delete') {  // 监听删除操作
                 doDel(obj);
+            }else if(obj.event === 'look'){
+                console.log("obj:",obj);
+                window.open(''+publicurl+'bpmnjs/dist/index.html?type=lookBpmn&instanceId='+obj.data.id+'&deploymentFileUUID='+obj.data.processDefinitionId2+'&deploymentName='+ encodeURI(obj.data.ResourceName)+'');
             }
         });
 
@@ -151,7 +155,7 @@
                 }, 'json');
             });
         };
-        /* 删除流程定义 */
+        /* 删除流程实例 */
         function doDel(obj) {
             layer.confirm('确定要删除该流程吗？', {
                 skin: 'layui-layer-admin',
@@ -159,8 +163,8 @@
             }, function (i) {
                 layer.close(i);
                 var loadIndex = layer.load(2);
-                $.get( ''+publicurl+'processDefinition/delDefinition', {
-                    pdID: obj.data ? obj.data.id : '',
+                $.get( ''+publicurl+'processInstance/deleteInstance', {
+                    instanceID: obj.data ? obj.data.id : '',
                 }, function (res) {
                     layer.close(loadIndex);
                     if (res.status === 0) {

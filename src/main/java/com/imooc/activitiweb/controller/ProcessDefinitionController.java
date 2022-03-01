@@ -41,6 +41,11 @@ public class ProcessDefinitionController {
     private SecurityUtil securityUtil;
 
 
+    /**
+     * 通过【上传bpmn文件】来【添加流程定义】
+     * @param multipartFile
+     * @return 成功状态码信息；流程部署id；上传的文件名
+     */
     @PostMapping(value = "/uploadStreamAndDeployment")
     public AjaxResponse uploadStreamAndDeployment(@RequestParam("processFile") MultipartFile multipartFile) {
         // 获取上传的文件名
@@ -135,6 +140,12 @@ public class ProcessDefinitionController {
 
     }
 
+    /**
+     * 通过【在线提交BPMN的XML】来【添加流程定义】
+     * @param stringBPMN
+     * @param deploymentName
+     * @return
+     */
     @PostMapping(value = "/addDeploymentByString")
     public AjaxResponse addDeploymentByString(@RequestParam("stringBPMN") String stringBPMN,@RequestParam("deploymentName") String deploymentName) {
         try {
@@ -178,6 +189,10 @@ public class ProcessDefinitionController {
     }*/
 
 
+    /**
+     * 获取流程定义列表
+     * @return
+     */
     //import org.activiti.engine.RepositoryService;
     @GetMapping(value = "/getDefinitions")
     public AjaxResponse getDefinitions() {
@@ -204,15 +219,17 @@ public class ProcessDefinitionController {
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
         }catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "获取流程定义失败", e.toString());
+                    "获取流程定义列表失败：", e.toString());
         }
     }
 
-    //获取流程定义XML
+    /**
+     *  获取流程定义XML，可以在部署列表里查看流程图
+     */
     @GetMapping(value = "/getDefinitionXML")
     public void getProcessDefineXML(HttpServletResponse response,
-                                    @RequestParam("deploymentId") String deploymentId,
-                                    @RequestParam("resourceName") String resourceName) {
+                                    @RequestParam("deploymentId") String deploymentId,          //流程部署的id
+                                    @RequestParam("resourceName") String resourceName) {        //文件名
 
 
 
@@ -220,7 +237,7 @@ public class ProcessDefinitionController {
             InputStream inputStream = repositoryService.getResourceAsStream(deploymentId,resourceName);
             int count = inputStream.available();
             byte[] bytes = new byte[count];
-            response.setContentType("text/xml");
+            response.setContentType("text/xml");    //输出为xml格式
             OutputStream outputStream = response.getOutputStream();
             while (inputStream.read(bytes) != -1) {
                 outputStream.write(bytes);
@@ -232,6 +249,10 @@ public class ProcessDefinitionController {
     }
 
 
+    /**
+     * 获取【流程部署列表】
+     * @return
+     */
     @GetMapping(value = "/getDeployments")
     public AjaxResponse getDeployments() {
         try {
@@ -250,25 +271,25 @@ public class ProcessDefinitionController {
                     GlobalConfig.ResponseCode.SUCCESS.getDesc(), listMap);
         } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "查询失败", e.toString());
+                    "获取流程部署列表失败：", e.toString());
         }
     }
 
-
-
-    //删除流程定义
+    /**
+     * 删除流程定义
+     * @param pdID
+     * @return
+     */
     @GetMapping(value = "/delDefinition")
     public AjaxResponse delDefinition(@RequestParam("pdID") String pdID) {
         try {
 
             repositoryService.deleteDeployment(pdID, true);
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.SUCCESS.getCode(),
-                    "删除成功", null);
-
-
+                    "删除流程定义成功", null);
         } catch (Exception e) {
             return AjaxResponse.AjaxData(GlobalConfig.ResponseCode.ERROR.getCode(),
-                    "删除失败", e.toString());
+                    "删除流程定义失败", e.toString());
         }
     }
 

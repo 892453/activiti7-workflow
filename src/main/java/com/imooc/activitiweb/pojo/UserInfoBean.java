@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserInfoBean implements UserDetails {
+//    这些 属性 和【数据库用户表】一一对应
     private Long id;
     public String name;
     private String address;
@@ -24,6 +25,7 @@ public class UserInfoBean implements UserDetails {
      * @return
      */
     @Override
+//    返回用户角色列表
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.stream(roles.split(",")).map(e->new SimpleGrantedAuthority(e)).collect(Collectors.toSet());
     }

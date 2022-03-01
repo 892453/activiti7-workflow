@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * 登录安全框架的 配置类
+ */
+
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -59,7 +63,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/login")       //登录前的处理，比如验证是否登录
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailureHandler)
                 //.defaultSuccessUrl("/hello")
